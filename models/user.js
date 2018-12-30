@@ -1,4 +1,4 @@
-const mongoost = require('mongoose');
+const mongoose = require('mongoose');
 const validator = require('validator');
 const moment = require('moment-timezone');
 const bcrypt = require('bcryptjs');
@@ -8,7 +8,7 @@ const {
     ObjectID
 } = require('mongodb');
 
-var UserSchema = new mongoost.Schema({
+var UserSchema = new mongoose.Schema({
     email: {
         type: String,
         required: true,
