@@ -21,5 +21,53 @@ var UserSchema = new mongoost.Schema({
             },
             message: 'value不是合法邮箱'
         }
-    }
+    },
+    password: {
+        type: String,
+        required: true,
+        minlength: 6,
+
+    },
+    name: {
+        type: String,
+        required: true,
+        minlength: 1
+    },
+    phone: {
+        type: String,
+        required: true,
+        minlength: 8,
+    },
+    time: {
+        type: Date,
+    },
+    userID: {
+        type: String,
+        required: true,
+        minlength: 8,
+
+    },
+    department: {
+        type: String,
+        required: true,
+    },
+    lineId: {
+        type: String,
+    },
+    roleId: {
+        type: String,
+        required: true,
+    },
+    tokens: [{
+        acess: {
+            type: String,
+            required: true,
+        },
+        token: {
+            type: String,
+            required: true
+        }
+    }]
+
+
 })
