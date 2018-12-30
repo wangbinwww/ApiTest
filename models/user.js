@@ -19,7 +19,7 @@ var UserSchema = new mongoose.Schema({
             validator: (value) => {
                 validator.isEmail(value)
             },
-            message: 'value不是合法邮箱'
+            message: '不是合法邮箱'
         }
     },
     password: {
@@ -59,7 +59,7 @@ var UserSchema = new mongoose.Schema({
         required: true,
     },
     tokens: [{
-        acess: {
+        access: {
             type: String,
             required: true,
         },
@@ -71,3 +71,40 @@ var UserSchema = new mongoose.Schema({
 
 
 })
+
+UserSchema.methods.generateToken = function() {
+    var user = this;
+    var access = user.roleId;
+    //建立token
+    var token = jwt.sign({
+        _id: user._id.toHexString(),
+        access
+    }, 'abc123').toString();
+    //
+    user.tokens.push({
+        access,
+        token
+    });
+    return user.save().then(() => {
+        return token
+    })
+
+}
+
+UserSchema.pre('save', function(next) {
+        var user = this;
+        if (user.isModified('password')) {
+            bcrypt.hash(user.password, 10).then(hash => {
+                user.password = hash;
+                next();
+            })
+
+        } else {
+            next();
+        }
+    })
+    //把模型实例化道一个物件上
+var User = mongoose.model('User', UserSchema);
+module.exports = {
+    User
+}
