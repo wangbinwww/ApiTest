@@ -13,12 +13,6 @@ app.get('/get', function(req, res) {
     });
 })
 
-
-app.listen(3000, () => {
-    console.log(moment().tz("Asia/Taipei").format())
-    console.log("监听端口3000！通过 http://localhost:3000/get 访问")
-});
-
 //服务器端body输入
 //http://localhost:3000/post
 // {
@@ -34,4 +28,9 @@ app.post('/post', function(req, res) {
         getPerson: person,
         message: 'Pass OK',
     });
+});
+
+app.listen(3000, () => {
+    console.log(moment().tz("Asia/Taipei").format())
+    console.log("监听端口3000！通过 http://localhost:3000/get 访问")
 });
