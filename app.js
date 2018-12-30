@@ -35,4 +35,3 @@ app.post('/post', function(req, res) {
         message: 'Pass OK',
     });
 });
-~
