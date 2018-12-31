@@ -51,10 +51,10 @@ var UserSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    lineId: {
+    lineID: {
         type: String,
     },
-    roleId: {
+    roleID: {
         type: String,
         required: true,
     },
@@ -74,7 +74,7 @@ var UserSchema = new mongoose.Schema({
 
 UserSchema.methods.generateToken = function() {
     var user = this;
-    var access = user.roleId;
+    var access = user.roleID;
     //建立token
     var token = jwt.sign({
         _id: user._id.toHexString(),
