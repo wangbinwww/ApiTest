@@ -6,6 +6,10 @@ const mongoose = require('mongoose');
 const {
     User
 } = require('./models/user.js');
+const {
+    authenticate
+} = require('./middleware/authenticate.js');
+
 
 mongoose.connect('mongodb://localhost:27017/APISystem', {
     useNewUrlParser: true,
@@ -40,7 +44,7 @@ app.post('/login', (req, res) => {
     var body = _.pick(req.body, ['email', 'password']);
     User.findByCredentials(body.email, body.password).then((user) => {
         return user.generateToken().then((token) => {
-            res.header('authTonen', token).send({
+            res.header('authToken', token).send({
                 "用户名:": user.name,
                 "登录状态": "登录成功！"
             })
@@ -54,6 +58,11 @@ app.post('/login', (req, res) => {
     })
 })
 
+app.get('/checkme', authenticate, (req, res) => {
+    var user = req.user;
+    var objUser = user.toJson();
+    res.send(objUser);
+})
 
 
 app.listen(8700, () => {

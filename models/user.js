@@ -8,6 +8,8 @@ const {
     ObjectID
 } = require('mongodb');
 
+
+
 var UserSchema = new mongoose.Schema({
     email: {
         type: String,
@@ -121,10 +123,22 @@ UserSchema.statics.findByToken = function(token) {
     var User = this;
     var decoded;
     try {
-        decode = jwt.verify(token, 'abc123')
+        decoded = jwt.verify(token, 'abc123')
     } catch (e) {
         return Promise.reject();
     }
+    return User.findOne({
+        _id: decoded._id,
+        'tokens.token': token,
+        'tokens.access': decoded.access
+    })
+
+}
+
+UserSchema.methods.toJson = function() {
+    var user = this;
+    var userObj = user.toObject();
+    return _.pick(userObj, ['_id', 'email', 'phone', 'userID', 'department', 'roleID']);
 }
 
 //注册
