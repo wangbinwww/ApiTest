@@ -72,6 +72,7 @@ var UserSchema = new mongoose.Schema({
 
 })
 
+//token生成
 UserSchema.methods.generateToken = function() {
     var user = this;
     var access = user.roleID;
@@ -84,8 +85,6 @@ UserSchema.methods.generateToken = function() {
     } catch (err) {
         console.log('错误：', err)
     }
-
-    //
     user.tokens.push({
         access,
         token
@@ -96,6 +95,28 @@ UserSchema.methods.generateToken = function() {
 
 }
 
+//登录
+UserSchema.statics.findByCredentials = function(email, password) {
+    var User = this;
+    return User.findOne({
+        email
+    }).then(user => {
+        if (!email) {
+            return Promise.reject('没有这个注册用户！');
+        }
+        return new Promise((resolve, reject) => {
+            bcrypt.compare(password, user.password).then(res => {
+                if (res) {
+                    resolve(user)
+                } else {
+                    reject('密码错误！')
+                }
+            })
+        })
+    })
+}
+
+//注册
 UserSchema.pre('save', function(next) {
         var user = this;
         if (user.isModified('password')) {

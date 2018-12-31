@@ -17,8 +17,9 @@ mongoose.connect('mongodb://localhost:27017/APISystem', {
 var app = express();
 app.use(bodyParser.json());
 
+//注册
 app.post('/signup', (req, res) => {
-    var body = _.pick(req.body, ['email', 'password', 'name', 'phone', 'userID', 'department', 'lineID', 'roleID'])
+    var body = _.pick(req.body, ['email', 'password', 'name', 'phone', 'userID', 'department', 'lineID', 'roleID']);
     body.time = Date.now();
     var user = new User(body);
     user.save().then(() => {
@@ -34,7 +35,17 @@ app.post('/signup', (req, res) => {
     });
 })
 
-//mongoose.set('useCreateIndex', true);
+//登录
+app.post('/login', (req, res) => {
+    var body = _.pick(req.body, ['email', 'password']);
+    User.findByCredentials(body.email, body.password).then((user) => {
+        return user.generateToken().then((token) => {
+            res.header('authTonen', token).send()
+        }).catch((e) => {
+            res.status(403).send(e);
+        })
+    })
+})
 
 app.listen(8700, () => {
     //console.log("启动时间：")
