@@ -116,6 +116,17 @@ UserSchema.statics.findByCredentials = function(email, password) {
     })
 }
 
+//验证token
+UserSchema.statics.findByToken = function(token) {
+    var User = this;
+    var decoded;
+    try {
+        decode = jwt.verify(token, 'abc123')
+    } catch (e) {
+        return Promise.reject();
+    }
+}
+
 //注册
 UserSchema.pre('save', function(next) {
         var user = this;
