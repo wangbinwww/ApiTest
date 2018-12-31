@@ -7,9 +7,9 @@ const {
     User
 } = require('./models/user.js');
 
-//mongoose.Promise = global.process;
 mongoose.connect('mongodb://localhost:27017/APISystem', {
-    //useMongoClient: true
+    useNewUrlParser: true,
+    autoIndex: false
 });
 
 
@@ -22,17 +22,23 @@ app.post('/signup', (req, res) => {
     body.time = Date.now();
     var user = new User(body);
     user.save().then(() => {
+        //return user.generateToken();
         user.generateToken();
     }).then((token) => {
-        res.header('authToken', token).send(user.name);
+        res.header('authToken', token).send({
+            "注册用户名:": user.name,
+            "注册信息": "注册成功！"
+        });
     }).catch((error) => {
         res.status(400).send(error);
-    })
+    });
 })
 
+//mongoose.set('useCreateIndex', true);
+
 app.listen(8700, () => {
-    console.log("启动时间：")
-    console.log(moment().tz("Asia/China").format())
+    //console.log("启动时间：")
+    //console.log(moment().tz("Asia/China").format())
     console.log("监听端口8700！通过 http://localhost:8700/get 访问")
 });
 
@@ -40,7 +46,7 @@ app.listen(8700, () => {
 //http://localhost:3000/getg
 app.get('/get', function(req, res) {
     res.status(200).json({
-        message: 'hello world',
+        message: '服务器启动状态！',
     });
 })
 
@@ -58,6 +64,6 @@ app.post('/post', function(req, res) {
     }
     res.status(200).json({
         getPerson: person,
-        message: 'Pass OK',
+        message: '校验密码通过！',
     });
 });

@@ -15,7 +15,7 @@ var UserSchema = new mongoose.Schema({
         trim: true,
         minlength: 1,
         unique: true,
-        validate: {
+        validator: {
             validator: (value) => {
                 validator.isEmail(value)
             },
@@ -76,10 +76,15 @@ UserSchema.methods.generateToken = function() {
     var user = this;
     var access = user.roleID;
     //建立token
-    var token = jwt.sign({
-        _id: user._id.toHexString(),
-        access
-    }, 'abc123').toString();
+    try {
+        var token = jwt.sign({
+            _id: user._id.toHexString(),
+            access
+        }, 'abc123').toString();
+    } catch (err) {
+        console.log('错误：', err)
+    }
+
     //
     user.tokens.push({
         access,
