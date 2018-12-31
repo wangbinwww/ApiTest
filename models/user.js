@@ -83,7 +83,7 @@ UserSchema.methods.generateToken = function() {
             access
         }, 'abc123').toString();
     } catch (err) {
-        console.log('错误：', err)
+        console.log('token错误：', err)
     }
     user.tokens.push({
         access,

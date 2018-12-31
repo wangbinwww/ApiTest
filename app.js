@@ -40,10 +40,17 @@ app.post('/login', (req, res) => {
     var body = _.pick(req.body, ['email', 'password']);
     User.findByCredentials(body.email, body.password).then((user) => {
         return user.generateToken().then((token) => {
-            res.header('authTonen', token).send()
+            res.header('authTonen', token).send({
+                "用户名:": user.name,
+                "登录状态": "登录成功！"
+            })
         }).catch((e) => {
-            res.status(403).send(e);
+            res.status(403).send("未知错误！" + e);
         })
+    }).catch((e) => {
+        res.status(403).send({
+            "登录状态": "密码错误！"
+        });
     })
 })
 
