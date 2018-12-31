@@ -45,7 +45,7 @@ app.post('/login', (req, res) => {
                 "登录状态": "登录成功！"
             })
         }).catch((e) => {
-            res.status(403).send("未知错误！" + e);
+            res.status(403).send("token错误！" + e);
         })
     }).catch((e) => {
         res.status(403).send({
