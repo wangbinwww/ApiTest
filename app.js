@@ -75,7 +75,7 @@ app.listen(8700, () => {
 //http://localhost:3000/getg
 app.get('/get', function(req, res) {
     res.status(200).json({
-        message: '服务器启动状态！',
+        "服务器状态": '启动',
     });
 })
 
@@ -93,6 +93,6 @@ app.post('/post', function(req, res) {
     }
     res.status(200).json({
         getPerson: person,
-        message: '校验密码通过！',
+        message: 'post测试成功！返回post body',
     });
 });

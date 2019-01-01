@@ -12,7 +12,7 @@ var authenticate = (req, res, next) => {
         req.token = token;
         next();
     }).catch((e) => {
-        res.status(403).send();
+        res.status(403).send('找不到token');
     })
 }
 
